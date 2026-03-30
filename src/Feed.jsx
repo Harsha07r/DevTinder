@@ -3,6 +3,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setFeed } from "./utils/feedSlice";
 import UserCard from "./UserCard";
+
 const Feed = () => {
 
   const feed = useSelector((store) => store.feed.feed);
