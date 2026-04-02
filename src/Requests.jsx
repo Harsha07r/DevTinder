@@ -3,14 +3,18 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests } from "./utils/requestSlice";
 
+// ✅ ADDED: Environment variable for the backend URL
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const Requests = () => {
   const dispatch = useDispatch();
   const requests = useSelector((store) => store.requests);
 
   const fetchRequests = async () => {
     try {
+      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
       const res = await axios.get(
-        "http://localhost:3000/requests",
+        `${BASE_URL}/requests`,
         { withCredentials: true }
       );
 
@@ -22,8 +26,9 @@ const Requests = () => {
 
   const handleReview = async (id, status) => {
     try {
+      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
       await axios.post(
-        "http://localhost:3000/request/review",
+        `${BASE_URL}/request/review`,
         { requestId: id, status },
         { withCredentials: true }
       );

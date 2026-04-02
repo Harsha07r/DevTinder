@@ -3,8 +3,11 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { removeFromFeed } from './utils/feedSlice';
 
+// ✅ ADDED: Environment variable for the backend URL
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const UserCard = ({ user }) => {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   let fullName = '';
   if ((user.firstName && user.firstName.trim()) || (user.lastName && user.lastName.trim())) {
     fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
@@ -14,42 +17,43 @@ const UserCard = ({ user }) => {
 
   // -------- NEW FUNCTION --------
   const sendRequest = async (toUserId) => {
-try {
-  await axios.post(
-    "http://localhost:3000/request/send",
-    { toUserId },
-    { withCredentials: true }
-  );
+    try {
+      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
+      await axios.post(
+        `${BASE_URL}/request/send`,
+        { toUserId },
+        { withCredentials: true }
+      );
 
-  dispatch(removeFromFeed(toUserId));
-
-} catch (err) {
-
-  // 🔥 NEW
-  if (err.response?.data?.message === "Request already sent") {
       dispatch(removeFromFeed(toUserId));
-      return;
-  }
 
-  alert("Failed");
-}
+    } catch (err) {
+      // 🔥 NEW
+      if (err.response?.data?.message === "Request already sent") {
+          dispatch(removeFromFeed(toUserId));
+          return;
+      }
+
+      alert("Failed");
+    }
   };
   // -----------------------------
 
-  const handleReject =async(toUserId)=>{
-   try{
+  const handleReject = async (toUserId) => {
+   try {
+    // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
     await axios.post(
-      "http://localhost:3000/request/send",
-      { toUserId ,status:"rejected"},
+      `${BASE_URL}/request/send`,
+      { toUserId, status: "rejected" },
       { withCredentials: true }
     );
     //remove the user from feed
     dispatch(removeFromFeed(toUserId));
-   } catch(err){
-    alert("Failed to reject request"
-    )
+   } catch(err) {
+    alert("Failed to reject request");
    }
   }
+
   return (
     <div className="card w-80 bg-base-100 shadow-xl">
       <figure className="h-60">
@@ -90,7 +94,7 @@ try {
             </button>
 
             <button className="btn btn-error rounded-full px-6"
-            onClick={()=>handleReject(user._id)}
+            onClick={() => handleReject(user._id)}
             >
               ❌ Reject
             </button>

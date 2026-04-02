@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFeed } from "./utils/feedSlice";
 import UserCard from "./UserCard";
 
+// ✅ ADDED: Environment variable for the backend URL
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const Feed = () => {
 
   const feed = useSelector((store) => store.feed.feed);
@@ -14,20 +17,21 @@ const Feed = () => {
     if (feed?.length) return;
 
     try {
+      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
       const res = await axios.get(
-        "http://localhost:3000/posts",
+        `${BASE_URL}/posts`,
         { withCredentials: true }
       );
 
       dispatch(setFeed(res.data));
 
     } catch (err) {
-  console.log("===== FEED ERROR DEBUG =====");
-  console.log("err.message:", err.message);
-  console.log("err.response:", err.response);
-  console.log("status:", err.response?.status);
-  console.log("data:", err.response?.data);
-}
+      console.log("===== FEED ERROR DEBUG =====");
+      console.log("err.message:", err.message);
+      console.log("err.response:", err.response);
+      console.log("status:", err.response?.status);
+      console.log("data:", err.response?.data);
+    }
 
   };
 

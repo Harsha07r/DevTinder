@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { createSocketConnection } from "./utils/socket";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 const formatTime = (ts) => {
   if (!ts) return "";
@@ -189,7 +189,7 @@ const Chat = () => {
             </div>
           </div>
         )}
-
+b
         <div ref={bottomRef} />
       </div>
 

@@ -4,6 +4,9 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { addUser } from './utils/userSlice';
 
+// ✅ ADDED: Environment variable for the backend URL
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const EditProfile = ({ user }) => {
 
   const dispatch = useDispatch();
@@ -33,8 +36,9 @@ const EditProfile = ({ user }) => {
     e.preventDefault();
 
     try {
+      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
       const res = await axios.put(
-        "http://localhost:3000/profile",
+        `${BASE_URL}/profile`,
         {
           firstName: form.firstName,
           lastName: form.lastName,

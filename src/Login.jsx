@@ -3,6 +3,10 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom"; 
 import { addUser } from "./utils/userSlice.js";
+
+// ✅ ADDED: Environment variable for the backend URL
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const Login = () => {
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
@@ -12,32 +16,33 @@ const Login = () => {
   const dispatch= useDispatch();
   const navigate = useNavigate(); 
 
-const handleLogin = async () => {
-  setLoading(true);
-  setError("");
+  const handleLogin = async () => {
+    setLoading(true);
+    setError("");
 
-  try {
-    const res = await axios.post(
-      "http://localhost:3000/login",
-      { emailId, password },
-      { withCredentials: true }
-    );
+    try {
+      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
+      const res = await axios.post(
+        `${BASE_URL}/login`,
+        { emailId, password },
+        { withCredentials: true }
+      );
 
-    // 1️⃣ Save user in Redux first
-    dispatch(addUser(res.data.data));
+      // 1️⃣ Save user in Redux first
+      dispatch(addUser(res.data.data));
 
-    setEmailId("");
-    setPassword("");
+      setEmailId("");
+      setPassword("");
 
-    // 2️⃣ Then navigate
-    navigate("/");
+      // 2️⃣ Then navigate
+      navigate("/");
 
-  } catch (err) {
-    setError(err.response?.data?.error || "Login failed");
-  } finally {
-    setLoading(false);
-  }
-};
+    } catch (err) {
+      setError(err.response?.data?.error || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex justify-center my-20">

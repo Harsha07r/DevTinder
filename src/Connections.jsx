@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addConnections } from "./utils/connectionSlice";
 
+// ✅ ADDED: Environment variable for the backend URL
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const Connections = () => {
 
   const connections = useSelector(store => store.connections);
@@ -16,8 +19,9 @@ const Connections = () => {
 
   const handleRemove = async (id) => {
     try {
+      // ✅ FIXED: Using BASE_URL instead of hardcoded localhost
       await axios.delete(
-        `http://localhost:3000/connection/${id}`,
+        `${BASE_URL}/connection/${id}`,
         { withCredentials: true }
       );
 
@@ -32,8 +36,9 @@ const Connections = () => {
   useEffect(() => {
     const fetchConnections = async () => {
       try {
+        // ✅ FIXED: Using BASE_URL instead of hardcoded localhost
         const res = await axios.get(
-          "http://localhost:3000/connections",
+          `${BASE_URL}/connections`,
           { withCredentials: true }
         );
         dispatch(addConnections(res.data.data));

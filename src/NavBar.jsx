@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { removeUser } from "./utils/userSlice";
 
+// ✅ ADDED: Environment variable for the backend URL
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const NavBar = () => {
   const user = useSelector((store) => store.user.user);
   const isAuthenticated = useSelector((store) => store.user.isAuthenticated);
@@ -11,8 +14,9 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     try {
+      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
       await axios.post(
-        "http://localhost:3000/logout",
+        `${BASE_URL}/logout`,
         {},
         { withCredentials: true }
       );
@@ -55,7 +59,7 @@ const NavBar = () => {
                 />
               </div>
             </div>
- 
+
             <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
               <li className="px-2 py-1 font-semibold">{user?.name || "User"}</li>
               <li><Link to="/profile">Profile</Link></li>

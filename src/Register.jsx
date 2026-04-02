@@ -3,6 +3,9 @@ import axios from "axios";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
+// ✅ ADDED: Environment variable for the backend URL
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -14,12 +17,14 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/register", {
+      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
+      const res = await axios.post(`${BASE_URL}/register`, {
         firstName,
         lastName,
         emailId,
         password,
       });
+      
       // 1. Alert user of success
       alert("Registration Successful!");
 
