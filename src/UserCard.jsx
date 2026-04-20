@@ -19,10 +19,8 @@ const UserCard = ({ user }) => {
     fullName = 'No Name';
   }
 
-  // -------- NEW FUNCTION --------
   const sendRequest = async (toUserId) => {
     try {
-      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
       await axios.post(
         `${BASE_URL}/request/send`,
         { toUserId },
@@ -32,7 +30,6 @@ const UserCard = ({ user }) => {
       dispatch(removeFromFeed(toUserId));
 
     } catch (err) {
-      // 🔥 NEW
       if (err.response?.data?.message === "Request already sent") {
           dispatch(removeFromFeed(toUserId));
           return;
@@ -41,11 +38,9 @@ const UserCard = ({ user }) => {
       alert("Failed");
     }
   };
-  // -----------------------------
 
   const handleReject = async (toUserId) => {
    try {
-    // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
     await axios.post(
       `${BASE_URL}/request/send`,
       { toUserId, status: "rejected" },
@@ -62,8 +57,8 @@ const UserCard = ({ user }) => {
     <div className="card w-80 bg-base-100 shadow-xl">
       <figure className="h-60">
         <img
-          // 🔥 THE FIX: Ignore the database completely and force the clean avatar
-          src={DEFAULT_AVATAR}
+          // 🔥 THE FIX: Use the DB photo if it exists, otherwise use the Default Avatar
+          src={user.photoUrl || DEFAULT_AVATAR}
           alt={fullName}
           className="h-full w-full object-cover"
         />
@@ -90,7 +85,6 @@ const UserCard = ({ user }) => {
 
           <div className="card-actions justify-center gap-3 mt-3">
 
-            {/* 🔥 CONNECTED BUTTON */}
             <button
               className="btn btn-success rounded-full px-6"
               onClick={() => sendRequest(user._id)}
