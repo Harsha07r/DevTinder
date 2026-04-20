@@ -4,8 +4,10 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { addUser } from './utils/userSlice';
 
-// ✅ ADDED: Environment variable for the backend URL
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
+// ✅ ADDED: A standard default avatar image URL
+const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
 const EditProfile = ({ user }) => {
 
@@ -15,7 +17,8 @@ const EditProfile = ({ user }) => {
   const [form, setForm] = useState({
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
-    photoUrl: user?.photoUrl || "",
+    // ✅ FIXED: Fallback to the default avatar if photoUrl is empty
+    photoUrl: user?.photoUrl || DEFAULT_AVATAR,
     age: user?.age || "",
     gender: user?.gender || "",
     about: user?.about || ""
@@ -36,7 +39,6 @@ const EditProfile = ({ user }) => {
     e.preventDefault();
 
     try {
-      // ✅ FIXED: Replaced hardcoded localhost with BASE_URL
       const res = await axios.put(
         `${BASE_URL}/profile`,
         {
@@ -125,7 +127,6 @@ const EditProfile = ({ user }) => {
             </label>
 
             <div className="flex gap-4 mb-3">
-
               {/* Age */}
               <label className="form-control w-1/2">
                 <div className="label">

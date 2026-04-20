@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
@@ -12,6 +11,7 @@ import Register from "./Register.jsx";
 import Connections from "./Connections.jsx";
 import Requests from "./Requests.jsx";
 import Chat from "./Chat.jsx";
+import LandingPage from "./LandingPage.jsx"; // <-- 1. Import the new component
 
 function AppContent() {
   useAutoLogin();
@@ -21,9 +21,10 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<Body />}>
 
-          {/* default route */}
-          <Route index element={<Feed />} />
+          {/* 2. Change the default route to display the Landing Page */}
+          <Route index element={<LandingPage />} />
 
+          {/* The feed is still accessible at /feed after login */}
           <Route path="feed" element={<Feed />} />
           <Route path="profile" element={<Profile />} />
           <Route path="login" element={<Login />} />
