@@ -6,8 +6,12 @@ import { removeFromFeed } from './utils/feedSlice';
 // ✅ ADDED: Environment variable for the backend URL
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
+// The clean default avatar
+const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
 const UserCard = ({ user }) => {
   const dispatch = useDispatch();
+  
   let fullName = '';
   if ((user.firstName && user.firstName.trim()) || (user.lastName && user.lastName.trim())) {
     fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
@@ -58,7 +62,8 @@ const UserCard = ({ user }) => {
     <div className="card w-80 bg-base-100 shadow-xl">
       <figure className="h-60">
         <img
-          src={user.photoUrl || "/profile.jpg"}
+          // 🔥 THE FIX: Ignore the database completely and force the clean avatar
+          src={DEFAULT_AVATAR}
           alt={fullName}
           className="h-full w-full object-cover"
         />
